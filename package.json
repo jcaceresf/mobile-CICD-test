@@ -39,6 +39,13 @@
       "!**/node_modules/**",
       "!**/babel.config.js",
       "!**/jest.setup.js"
+    ],
+    "reporters": [
+      "default",
+      ["jest-html-reporters", {
+        "pageTitle": "Test Report",
+        "outputPath": "reports/test-report.html"
+      }]
     ]
   }
 }
