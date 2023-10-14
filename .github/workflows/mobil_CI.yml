@@ -1,4 +1,3 @@
-
 name: Mobil CI
 
 on:
@@ -8,7 +7,7 @@ on:
       - main
 
 jobs:
-  build:
+  CI:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +24,12 @@ jobs:
       run: |
         npm install
 
-    - name: Ejecutar tests
+    - name: Ejecutar tests y generar reporte HTML
       run: |
         npm test
+
+    - name: Almacenar reportes de pruebas en HTML
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-reports-html
+        path: reports/test-report.html
