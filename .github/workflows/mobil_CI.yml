@@ -24,10 +24,16 @@ jobs:
       run: |
         npm install
 
+    - name: Crear directorio para reportes
+      run: mkdir -p reports
+
     - name: Ejecutar tests y generar reporte HTML
       run: |
         npm run test
 
+    - name: Listar archivos en directorio de reportes
+      run: ls -la reports/
+      
     - name: Almacenar reportes de pruebas en HTML
       uses: actions/upload-artifact@v2
       with:
