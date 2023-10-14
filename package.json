@@ -44,7 +44,9 @@
       "default",
       ["jest-html-reporters", {
         "pageTitle": "Test Report",
-        "outputPath": "reports/test-report.html"
+        "outputPath": "reports/test-report.html",
+        "publicPath": "./reports",
+        "filename": "test-report.html"
       }]
     ]
   }
