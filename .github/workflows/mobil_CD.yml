@@ -1,0 +1,60 @@
+name: Mobil CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  CD:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Instalar dependencias
+      run: |
+        npm install
+
+    - name: Crear directorio para reportes
+      run: mkdir -p reports
+
+    - name: Ejecutar tests y generar reporte HTML
+      run: |
+        npm run test
+      
+    - name: Almacenar reportes de pruebas en HTML
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-report
+        path: |
+          reports/test-report.html
+          reports/jest-html-reporters-attach/
+          - name: Instalar Expo CLI
+          run: npm install -g expo-cli
+    
+    - name: Iniciar sesión en Expo
+      run: echo "${{ secrets.EXPO_CLI_PASSWORD }}" | expo login -u ${{ secrets.EXPO_CLI_USERNAME }} --password-stdin
+      # NOTA: Debes configurar las variables de entorno EXPO_CLI_USERNAME y EXPO_CLI_PASSWORD en GitHub Secrets.
+
+    - name: Construir APK
+      run: expo build:android
+
+    - name: Descargar APK construida
+      run: curl -o app.apk "$(expo url:apk)"
+
+    - name: Publicar APK en GitHub Release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }} 
+        asset_path: ./app.apk
+        asset_name: app.apk
+        asset_content_type: application/vnd.android.package-archive
+    
