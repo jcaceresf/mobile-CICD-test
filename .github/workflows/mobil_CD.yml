@@ -51,17 +51,19 @@ jobs:
       with:
         eas-version: latest
         token: ${{ secrets.EXPO_TOKEN }}
-    
+
     - name: Construir APK
-      run: eas build -p android --non-interactive
-
+      run: |
+        eas build -p android --non-interactive | tee build-output.txt
+  
     - name: Obtener URL del APK
-      id: get-apk-url
-      run: echo "::set-output name=apk_url::$(expo url:apk)"
-
+      run: |
+        APK_URL=$(cat build-output.txt | grep -o "https://expo.dev/artifacts/eas/[^ ]*.apk")
+        echo "APK_URL=$APK_URL" >> $GITHUB_ENV
+  
     - name: Descargar APK construida
-      run: curl -o app.apk "${{ steps.get-apk-url.outputs.apk_url }}"
-
+      run: curl -o app.apk "${APK_URL}"
+  
     - name: Publicar APK en GitHub Release
       uses: actions/upload-release-asset@v1
       with:
