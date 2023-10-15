@@ -55,8 +55,12 @@ jobs:
     - name: Construir APK
       run: eas build -p android --non-interactive
 
+    - name: Obtener URL del APK
+      id: get-apk-url
+      run: echo "::set-output name=apk_url::$(expo url:apk)"
+
     - name: Descargar APK construida
-      run: curl -o app.apk "$(expo url:apk)"
+      run: curl -o app.apk "${{ steps.get-apk-url.outputs.apk_url }}"
 
     - name: Publicar APK en GitHub Release
       uses: actions/upload-release-asset@v1
