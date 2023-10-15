@@ -46,8 +46,11 @@ jobs:
     - name: Iniciar sesión en Expo
       run: echo "${{ secrets.EXPO_CLI_PASSWORD }}" | expo login -u ${{ secrets.EXPO_CLI_USERNAME }} -p ${{ secrets.EXPO_CLI_PASSWORD }}
 
-    - name: Iniciar sesión en Expo
-      run: eas login --non-interactive --access-token ${{ secrets.EXPO_TOKEN }}
+    - name: Setup EAS
+      uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        token: ${{ secrets.EXPO_TOKEN }}
     
     - name: Construir APK
       run: eas build -p android
