@@ -53,7 +53,7 @@ jobs:
         token: ${{ secrets.EXPO_TOKEN }}
     
     - name: Construir APK
-      run: eas build -p android -t apk
+      run: eas build -p android
 
     - name: Descargar APK construida
       run: curl -o app.apk "$(expo url:apk)"
