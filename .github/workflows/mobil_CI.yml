@@ -1,0 +1,43 @@
+name: Mobil CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Instalar dependencias
+      run: |
+        npm install
+
+    - name: Crear directorio para reportes
+      run: mkdir -p reports
+
+    - name: Ejecutar tests y generar reporte HTML
+      run: |
+        npm run test
+
+    - name: Listar archivos en directorio de reportes
+      run: ls -la reports/
+      
+    - name: Almacenar reportes de pruebas en HTML
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-report
+        path: |
+          reports/test-report.html
+          reports/jest-html-reporters-attach/
