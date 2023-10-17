@@ -62,7 +62,7 @@ jobs:
         echo "APK_URL=$APK_URL" >> $GITHUB_ENV
   
     - name: Descargar APK construida
-      run: curl -o app.apk "${APK_URL}"
+      run: curl -L -o app.apk "${APK_URL}"
 
     - name: Verificar APK
       run: |
