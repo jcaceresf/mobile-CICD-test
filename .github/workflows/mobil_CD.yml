@@ -63,6 +63,11 @@ jobs:
   
     - name: Descargar APK construida
       run: curl -o app.apk "${APK_URL}"
+
+    - name: Verificar APK
+      run: |
+        du -sh app.apk
+        file app.apk
   
     - name: Almacenar APK
       uses: actions/upload-artifact@v2
